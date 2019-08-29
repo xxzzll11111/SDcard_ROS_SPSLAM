@@ -227,7 +227,13 @@
     ./build.sh
     ```
     
-    > 编译到最后时会报错(神经网络重复定义)，这是因为在cmake中将dpu_superpoint.elf文件链接了多次。
+    > 编译到最后时会报错：
+    ```
+    ../../../../Thirdparty/superpoint/model/dpu_superpoint.elf:(.deephi.code.superpoint+0x0): first defined here
+    ../../../../Thirdparty/superpoint/model/dpu_superpoint.elf:(.deephi.code.superpoint+0xe51c): multiple definition of `_dpu_superpoint_ConvNdBackward3_code'
+    ```
+    
+    > 这是因为在cmake中将dpu_superpoint.elf文件链接了多次。
     > 这是cmake的bug，目前还找不到修复的方法，临时解决方案是进入`/root/catkin_ws/src/ORB_SLAM2_SP/Examples/ROS/ORB_SLAM2_SP/build/CMakeFiles/`目录，将`ORB.dir`、`SP.dir`、`TUM.dir`文件夹下的`build.make`和`link.txt`文件中的含有`dpu_superpoint.elf`的重复项删除，每个文件中只保留一条。
     
     修改完成后再次make
